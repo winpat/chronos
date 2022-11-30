@@ -1,0 +1,44 @@
+name: Test and Package project
+on: [push]
+jobs:
+  clojure:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres
+        env:
+          POSTGRES_DB: chronos_test
+          POSTGRES_USER: chronos
+          POSTGRES_PASSWORD: secret
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Cache Clojure Dependencies
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.m2
+            ~/.gitlibs
+          key: cache-${{ hashFiles('**/deps.edn') }}
+
+      - name: Prepare java
+        uses: actions/setup-java@v3.5.1
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Install clojure tools
+        uses: DeLaGuardo/setup-clojure@9.5
+        with:
+          cli: 1.11.1.1165
+
+      - name: Run tests
+        run: clojure -M:test
