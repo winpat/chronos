@@ -20,6 +20,20 @@
     (reset! api-server nil)))
 
 
+(defn transform-keys
+  [t coll]
+  (clojure.walk/postwalk (fn [x] (if (map? x) (update-keys x t) x)) coll))
+
+
+(defn wrap-remove-namespace-keywords [handler & _]
+  (fn [req]
+    (let [resp (handler req)]
+      (cond-> resp
+        (comp map? :body) (update :body
+                                  (partial transform-keys
+                                           (comp keyword name)))))))
+
+
 (defn read-todo
   "Retrieve todo."
   [request]
@@ -51,6 +65,7 @@
     (reset!
      api-server
      (server/run-server (-> app
+                            (wrap-remove-namespace-keywords)
                             (wrap-json-body)
                             (wrap-json-response)
                             (wrap-reload))
