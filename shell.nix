@@ -5,5 +5,7 @@ pkgs.mkShell {
     pkgs.clojure
     pkgs.docker-compose
     pkgs.postgresql
+    pkgs.clj-kondo
+    pkgs.httpie
   ];
 }
