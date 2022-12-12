@@ -6,9 +6,8 @@
             [ring.middleware.json :refer [wrap-json-response wrap-json-body]]
             [chronos.db :as db]
             [chronos.ui :refer [index]]
-            [compojure.core :refer [defroutes GET POST]]
+            [compojure.core :refer [defroutes GET POST PUT]]
             [compojure.route :as route]))
-
 
 (defonce ^:private api-server (atom nil))
 
@@ -43,6 +42,12 @@
       (response todo)
       {:status 404 :body {:error "not found"}})))
 
+(defn update-todo
+  "Update todo."
+  [request]
+  (let [todo (db/update-todo (:body request))]
+    (response todo)))
+
 
 (defn create-todo
   "Create todo."
@@ -54,6 +59,7 @@
 (defroutes app
   (GET "/api/v1/todos/:id" [] read-todo)
   (POST "/api/v1/todos/" []  create-todo)
+  (PUT "/api/v1/todos/" []  update-todo)
   (GET "/" [] (response (index)))
   (route/resources "/")
   (route/not-found "Not found!"))
