@@ -55,6 +55,13 @@
       (is (= (:title todo) (:todos/title (get-todo todo-id)))))))
 
 
+(deftest create-todo-400
+  (testing "todo is not created"
+    (let [invalid-todo {}
+          response (request app :post "/api/v1/todos/" invalid-todo)]
+      (is (= 400 (:status response))))))
+
+
 (deftest update-todo-200
   (testing "todo is updated"
     (let [todo-id 1
@@ -63,3 +70,10 @@
           response (request app :put "/api/v1/todos/" updated-todo)]
       (is (= 200 (:status response)))
       (is (= (:title updated-todo) (:todos/title (get-todo todo-id)))))))
+
+
+(deftest update-todo-400
+  (testing "todo is not updated"
+    (let [invalid-todo {}
+          response (request app :put "/api/v1/todos/" invalid-todo)]
+      (is (= 400 (:status response))))))

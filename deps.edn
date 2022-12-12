@@ -1,5 +1,6 @@
 {:paths ["src" "test" "resources"]
  :deps {com.taoensso/timbre {:mvn/version "5.1.2"}
+        org.clojure/clojure {:mvn/version "1.11.1"}
         com.github.seancorfield/next.jdbc {:mvn/version "1.3.847"}
         com.github.seancorfield/honeysql {:mvn/version "2.4.947"}
         org.postgresql/postgresql {:mvn/version "42.5.0"}
