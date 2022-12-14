@@ -53,3 +53,13 @@
           todo-id (get-in response [:body :todos/id])]
       (is (= 200 (:status response)))
       (is (= (:title todo) (:todos/title (get-todo todo-id)))))))
+
+
+(deftest update-todo-200
+  (testing "todo is updated"
+    (let [todo-id 1
+          todo (create-todo {:id todo-id :title "Hello World!"})
+          updated-todo {:id todo-id :title "Updated Hello World!"}
+          response (request app :put "/api/v1/todos/" updated-todo)]
+      (is (= 200 (:status response)))
+      (is (= (:title updated-todo) (:todos/title (get-todo todo-id)))))))
