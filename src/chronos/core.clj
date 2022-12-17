@@ -1,6 +1,7 @@
 (ns chronos.core
   (:gen-class)
   (:require [org.httpkit.server :as server]
+            [clojure.spec.alpha :as s]
             [ring.util.response :refer [response]]
             [ring.middleware.reload :refer [wrap-reload]]
             [ring.middleware.json :refer [wrap-json-response wrap-json-body]]
@@ -33,27 +34,43 @@
                                            (comp keyword name)))))))
 
 
+(s/def :todo/id int?)
+(s/def :todo/title string?)
+(s/def :todo/description (s/nilable string?))
+(s/def :todo/status #(re-matches #"(todo|done)" %))
+(s/def :todo/created-at (s/nilable inst?))
+(s/def :todo/completed-at (s/nilable inst?))
+(s/def :todo/archived-at (s/nilable inst?))
+
+(s/def :todo/todo (s/keys :req-un [:todo/title]
+			              :opt-un [:todo/id :todo/description :todo/status :todo/created-at :todo/completed-at :todo/archived-at]))
+
 (defn read-todo
   "Retrieve todo."
   [request]
   (let [todo-id (Integer/parseInt (get-in request [:route-params :id]))
         todo (db/get-todo todo-id)]
-    (if (some? todo)
+     (if (some? todo)
       (response todo)
       {:status 404 :body {:error "not found"}})))
+
 
 (defn update-todo
   "Update todo."
   [request]
-  (let [todo (db/update-todo (:body request))]
-    (response todo)))
+  (let [todo-data (:body request)]
+    (if-not (s/valid? :todo/todo todo-data)
+      {:status 400}
+      (response (db/update-todo todo-data)))))
 
 
 (defn create-todo
   "Create todo."
   [request]
-  (let [todo (db/create-todo (:body request))]
-    (response todo)))
+  (let [todo-data (:body request)]
+    (if-not (s/valid? :todo/todo todo-data)
+      {:status 400}
+      (response (db/create-todo todo-data)))))
 
 
 (defroutes app
