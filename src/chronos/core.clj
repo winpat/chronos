@@ -7,6 +7,7 @@
             [ring.middleware.reload :refer [wrap-reload]]
             [ring.middleware.json :refer [wrap-json-response wrap-json-body]]
             [chronos.db :as db]
+            [chronos.migrations :refer [pending-migrations]]
             [chronos.ui :refer [index]]
             [compojure.core :refer [defroutes GET POST PUT]]
             [compojure.route :as route]))
@@ -84,6 +85,9 @@
 
 
 (defn -main []
+  (while (pending-migrations db/db-spec)
+    (println "There 1 are pending migrations, apply them first.")
+    (Thread/sleep 1000))
   (println "Starting server.")
   (let [server-cfg {:port 5000 :ip "0.0.0.0"}]
     (reset!
