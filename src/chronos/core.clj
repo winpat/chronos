@@ -2,6 +2,7 @@
   (:gen-class)
   (:require [org.httpkit.server :as server]
             [clojure.spec.alpha :as s]
+            [clojure.walk :refer [postwalk]]
             [ring.util.response :refer [response]]
             [ring.middleware.reload :refer [wrap-reload]]
             [ring.middleware.json :refer [wrap-json-response wrap-json-body]]
@@ -22,7 +23,7 @@
 
 (defn transform-keys
   [t coll]
-  (clojure.walk/postwalk (fn [x] (if (map? x) (update-keys x t) x)) coll))
+  (postwalk (fn [x] (if (map? x) (update-keys x t) x)) coll))
 
 
 (defn wrap-remove-namespace-keywords [handler & _]
@@ -82,7 +83,7 @@
   (route/not-found "Not found!"))
 
 
-(defn -main [& args]
+(defn -main []
   (println "Starting server.")
   (let [server-cfg {:port 5000 :ip "0.0.0.0"}]
     (reset!
