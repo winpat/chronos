@@ -1,6 +1,5 @@
 (ns chronos.migrations
-  (:require [chronos.db :refer [db-spec]]
-            [ragtime.repl :as repl]
+  (:require [ragtime.repl :as repl]
             [ragtime.jdbc :as ragtime]))
 
 

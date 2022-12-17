@@ -2,8 +2,7 @@
    (:require [clojure.test :refer [deftest is testing use-fixtures]]
              [chronos.core :refer [app]]
              [next.jdbc :as jdbc]
-             [chronos.db :refer [get-todos get-todo create-todo]]
-             [ragtime.jdbc :as ragtime]
+             [chronos.db :refer [get-todo create-todo]]
              [chronos.migrations :refer [migrate]]))
 
 
@@ -65,7 +64,7 @@
 (deftest update-todo-200
   (testing "todo is updated"
     (let [todo-id 1
-          todo (create-todo {:id todo-id :title "Hello World!"})
+          _ (create-todo {:id todo-id :title "Hello World!"})
           updated-todo {:id todo-id :title "Updated Hello World!"}
           response (request app :put "/api/v1/todos/" updated-todo)]
       (is (= 200 (:status response)))
