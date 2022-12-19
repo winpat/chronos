@@ -1,4 +1,4 @@
-(ns chronos.migrations
+(ns chronos.backend.migrations
   (:require [ragtime.repl :as repl]
             [ragtime.protocols :refer [applied-migration-ids]]
             [clojure.set :refer [difference]]
