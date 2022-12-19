@@ -83,7 +83,7 @@
 
 
 (defn -main []
-  (while (pending-migrations db/db-spec)
+  (while (not-empty (pending-migrations db/db-spec))
     (println "There 1 are pending migrations, apply them first.")
     (Thread/sleep 1000))
   (println "Starting server.")
