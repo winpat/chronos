@@ -83,8 +83,8 @@
 
 
 (defn -main []
-  (while (pending-migrations db/db-spec)
-    (println "There 1 are pending migrations, apply them first.")
+  (while  (not-empty (pending-migrations db/db-spec))
+    (println "There are pending migrations, apply them first.")
     (Thread/sleep 1000))
   (println "Starting server.")
   (let [server-cfg {:port 5000 :ip "0.0.0.0"}]
