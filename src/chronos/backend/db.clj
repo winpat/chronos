@@ -1,4 +1,4 @@
-(ns chronos.db
+(ns chronos.backend.db
   (:require [next.jdbc :refer [get-datasource]]
             [next.jdbc.sql :as db]
             [honey.sql :as sql]))

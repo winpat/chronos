@@ -1,9 +1,9 @@
-(ns chronos.core-test
+(ns chronos.backend.core-test
    (:require [clojure.test :refer [deftest is testing use-fixtures]]
-             [chronos.core :refer [app]]
+             [chronos.backend.core :refer [app]]
              [next.jdbc :as jdbc]
-             [chronos.db :refer [get-todo create-todo]]
-             [chronos.migrations :refer [migrate]]))
+             [chronos.backend.db :refer [get-todo create-todo]]
+             [chronos.backend.migrations :refer [migrate]]))
 
 
 (def test-db-spec {:dbtype "postgres"
@@ -21,7 +21,7 @@
   :each
   (fn [test]
     (jdbc/with-transaction [txn test-db {:rollback-only true}]
-      (binding [chronos.db/*db* txn] (test)))))
+      (binding [chronos.backend.db/*db* txn] (test)))))
 
 (defn request
   ([app method resource]

@@ -7,5 +7,7 @@ pkgs.mkShell {
     pkgs.postgresql
     pkgs.clj-kondo
     pkgs.httpie
+    pkgs.nodejs
+    pkgs.openjdk
   ];
 }

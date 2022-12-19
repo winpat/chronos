@@ -2,3 +2,6 @@
 .rebel_readline_history
 .nrepl-port
 .clj-kondo/.cache
+node_modules/
+.shadow-cljs/
+public/js/

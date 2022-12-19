@@ -1,4 +1,4 @@
 (ns user
-  (:require [chronos.core :as core]
-            [chronos.db :as db]
-            [chronos.migrations :refer [migrate]]))
+  (:require [chronos.backend.core :as core]
+            [chronos.backend.db :as db]
+            [chronos.backend.migrations :refer [migrate]]))
